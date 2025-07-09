@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQLMap Web Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>SQLMap Web Interface</h1>
+
+    <!-- 🔍 Input Form -->
+    <form method="POST">
+        <label>Target URL: 
+            <small>(e.g. http://site.com/index.php?id=1)</small>
+        </label><br>
+        <input type="text" name="url" required placeholder="Enter URL with parameters..." style="width: 100%; padding: 5px;"><br><br>
+
+        <label>Action:</label><br>
+        <select name="option" style="padding: 5px;">
+            <option value="dbs">List Databases</option>
+            <option value="dump">Dump Tables</option>
+        </select><br><br>
+
+        <input type="submit" value="Run SQLMap" style="padding: 8px 16px;">
+    </form>
+
+    <!-- 📋 Result Output -->
+    {% if result %}
+        <h3>Output:</h3>
+        <pre style="background-color:#f4f4f4; padding: 10px;">{{ result }}</pre>
+
+        <!-- 📤 Export Section -->
+        <form action="/export" method="POST">
+            <!-- Use textarea to preserve multiline output -->
+            <textarea name="raw_output" style="display:none;">{{ result }}</textarea>
+            
+            <p><strong>Export Options:</strong></p>
+            <button type="submit" name="export_type" value="csv">📄 Export as CSV</button>
+            <button type="submit" name="export_type" value="pdf">🧾 Export as PDF with Chart</button>
+            <p style="font-size: small; color: gray;">PDF will include a summary chart if applicable.</p>
+        </form>
+    {% endif %}
+</body>
+</html>
